@@ -9,6 +9,7 @@ project(CWC)
 
 option(CWC_BUILD_TESTS "Build tests" OFF)
 option(CWC_BUILD_SAMPLES "Build samples" OFF)
+option(CWC_BOOST_DYNAMIC_LINKING "Use dynamic linking for Boost" OFF)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -67,13 +68,13 @@ if(CWC_BUILD_TESTS)
 	file(GLOB_RECURSE CWC_TEST "test/cwc/*")
 	source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/test/cwc FILES ${CWC_TEST})
 	add_executable(test-cwc ${CWC} ${CWC_TEST}) #including CWC sources here to have them included in IDEs
-	target_link_libraries(test-cwc cwc Boost::unit_test_framework)
+	target_link_libraries(test-cwc cwc Boost::unit_test_framework $<$<BOOL:${CWC_BOOST_DYNAMIC_LINKING}>:Boost::dynamic_linking>)
 	set_target_properties(test-cwc PROPERTIES FOLDER "C++ with Components")
 
 	file(GLOB_RECURSE CWCC_TEST "test/cwcc/*")
 	source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/test/cwcc FILES ${CWCC_TEST})
 	add_executable(test-cwcc ${CWCC_TEST})
-	target_link_libraries(test-cwcc cwc Boost::unit_test_framework)
+	target_link_libraries(test-cwcc cwc Boost::unit_test_framework $<$<BOOL:${CWC_BOOST_DYNAMIC_LINKING}>:Boost::dynamic_linking>)
 	set_target_properties(test-cwcc PROPERTIES FOLDER "C++ with Components")
 endif()
 
